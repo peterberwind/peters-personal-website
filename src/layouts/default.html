@@ -1,0 +1,66 @@
+{{!-- This is the base layout for your project, and will be used on every page. --}}
+
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Peter Humphrey, designer and technologist" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://peterhumphrey.com" />
+    <meta property="og:image" content="#" />
+    <meta property="og:description" content="Peter Humphrey is a NYC-based interactive designer and technologist." />
+    <title>Peter Humphrey ~ Designer and Developer</title>
+    <link rel="stylesheet" href="{{root}}assets/css/app.css">
+    <script type="text/paperscript" canvas="canvas">
+    // Adapted from the following Processing example:
+    // http://processing.org/learning/topics/follow3.html
+
+    // The amount of points in the path:
+    var points = 20;
+
+    // The distance between the points:
+    var length = 50;
+
+    var path = new Path({
+    	strokeColor: '#fff',
+    	strokeWidth: 20,
+    	strokeCap: 'round'
+    });
+
+    var start = view.center / [10, 1];
+    for (var i = 0; i < points; i++)
+    	path.add(start + new Point(i * length, 0));
+
+    function onMouseMove(event) {
+    	path.firstSegment.point = event.point;
+    	for (var i = 0; i < points - 1; i++) {
+    		var segment = path.segments[i];
+    		var nextSegment = segment.next;
+    		var vector = segment.point - nextSegment.point;
+    		vector.length = length;
+    		nextSegment.point = segment.point - vector;
+    	}
+    	path.smooth();
+    }
+
+    function onMouseDown(event) {
+    	path.fullySelected = true;
+    	path.strokeColor = '#0099ff';
+    }
+
+    function onMouseUp(event) {
+    	path.fullySelected = false;
+    	path.strokeColor = '#fff';
+    }
+    </script>
+  </head>
+  <body>
+
+    {{!-- Pages you create in the src/pages/ folder are inserted here when the flattened page is created. --}}
+    {{> body}}
+
+    <script src="{{root}}assets/js/app.js"></script>
+  </body>
+</html>
